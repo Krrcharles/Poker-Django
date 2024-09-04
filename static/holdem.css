@@ -1,0 +1,209 @@
+/* Reset default styles */
+body,
+li, ul,
+h2, p {
+  margin: 0;
+  padding: 0;
+}
+
+h2 {
+  margin-bottom: 8px;
+}
+ul {
+  margin-left: 20px;
+}
+li {
+  margin-top: 5px;
+}
+
+
+/* General rules */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #555;
+  padding-top: 10px;
+  width: 1600px;
+  margin: 0 auto;
+}
+.player {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: top;
+  align-items: center;
+  width: 100px;
+  height: 150px;
+  background-color: #fff;
+  border: 1px solid #000;
+  border-radius: 50px;
+  box-shadow: 0 0 5px #000;
+  padding: 10px 5px;
+}
+.player .dealer {
+  position: absolute;
+  display: flex;
+  justify-content: center;    
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.5em;
+  width: 30px;
+  height: 30px;
+  background-color: inherit;
+  border: 1px solid #000;
+  border-radius: 15px;
+  padding: 2px 1px;
+  right: -5px;
+  top: -10px;
+}
+.player.fold {
+  background-color: #ccc;
+}
+.player.thinking {
+  background-color: #ff4;
+}
+.player .username {
+  text-align: center;
+  margin-top: 5px;
+}
+.player .chips {
+  text-align: center;
+}
+.player img.user-image {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+}
+.player .bet-amount {
+  text-align: center;
+}
+img.card {
+  width: 113px;
+  margin: 10px;
+  background-color: #000;
+  box-shadow: 3px 3px 5px #000;
+  border-radius: 6px;
+}
+img.small-card {
+  width: 56px;
+  margin: 5px;
+  background-color: #000;
+  box-shadow: 2px 2px 3px #000;
+  border-radius: 3px;
+}
+img.chips {
+  width: 0.75em;
+  height: 0.75em;
+  margin-left: 0.1em;
+}
+
+/* Opponent's side*/
+.opponents-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 290px;
+}
+.opponents-side .opponents {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 10px;
+}
+.opponents-side .opponents .opponent-cards {
+  position: absolute;
+  top: 180px;
+  width: max-content;
+  border-radius: 0px;
+}
+
+/* Table */
+.table {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 280px;
+  background-color: green;
+  border: 1px solid #000;
+  border-radius: 150px;
+  padding: 10px;
+  box-shadow: 0 0 5px #000;
+  margin-top: 20px;
+}
+.table .pot {
+  font-size: 2em;
+  text-align: center;
+  margin-top: 10px;
+}
+.table .community-cards {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: top;
+  margin-top: 25px;
+}
+
+/* User side */
+.user-side {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-top: 20px;
+  height: 200px;
+}
+.user-side .cards {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.user-side .actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+.user-side .actions .action {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 50px;
+  background-color: #fff;
+  border: 1px solid #000;
+  border-radius: 5px;
+  padding: 5px;
+  box-shadow: 0 0 5px #000;
+  transition-duration: 0.4s;
+}
+.user-side .actions .action:not(:disabled) {
+  cursor: pointer;
+}
+.user-side .actions .action:not(:disabled):hover {
+  background-color: #ddd;
+}
+.user-side .actions form {
+  text-align: center;
+}
+.user-side .actions input {
+  width: 60px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+/* Chrome, Safari, Edge, Opera */
+.user-side .actions input::-webkit-outer-spin-button,
+.user-side .actions input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+.user-side .actions input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* Previous Round */
+div.previous-round {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}

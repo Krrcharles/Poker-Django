@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="{% static 'holdem.css' %}"/>
+  <meta http-equiv="refresh" content="10">
+  <title>Texas Hold'em Online</title>
+</head>
+<body>
+  <div class="previous-round">
+    {% block previous-round %}
+    {% endblock %}
+  </div>
+  <div class="opponents-side">
+    <div class="opponents">
+      {% block opponents %}
+      {% endblock %}
+    </div>
+  </div>
+  <div class="table">
+    <div class="pot">
+      {% block pot %}
+      {% endblock %}
+    </div>
+    <div class="community-cards">
+      {% block community-cards %}
+        <img class="card" title="" src="https://www.deckofcardsapi.com/static/img/back.png"/>
+        <img class="card" title="" src="https://www.deckofcardsapi.com/static/img/back.png"/>  
+        <img class="card" title="" src="https://www.deckofcardsapi.com/static/img/back.png"/>
+        <img class="card" title="" src="https://www.deckofcardsapi.com/static/img/back.png"/>
+        <img class="card" title="" src="https://www.deckofcardsapi.com/static/img/back.png"/>
+      {% endblock %}
+    </div>
+  </div>
+  <div class="user-side">
+    {% block user %}
+      <div class="player">
+      </div>
+    {% endblock %}
+    <div class="cards">
+      {% block user-cards %}
+        <img class="card" src="https://www.deckofcardsapi.com/static/img/back.png"/>
+        <img class="card" src="https://www.deckofcardsapi.com/static/img/back.png"/>
+      {% endblock %}
+    </div>
+    <div class="actions">
+      {% block user-fold %}
+        <button class="action">
+          Fold
+        </button>
+      {% endblock %}
+      {% block user-call-btn %}
+      {% endblock %}
+      <div>
+        {% block user-raise %}
+        {% endblock %}
+      </div>
+    </div>
+  </div>
+</body>
+</html>

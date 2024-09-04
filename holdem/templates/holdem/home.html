@@ -1,0 +1,238 @@
+{% extends "template.html" %}
+{% load static %}
+
+<!-- OPPONENTS-SIDE -->
+{% block opponents %}
+  {% for opponent in opponents %}
+    {% if opponent.action != 'spectator' %}
+      <div class="player {% if opponent.action == 'fold' %}fold{% endif %} {% if opponent.id == round.player_to_play %}thinking{% endif %}">
+        {% if opponent.id == dealer_id %}
+          <div class="dealer">D</div>
+        {% endif %}
+        <p class="username">{{ opponent.username }}</p>
+        <p class="chips">
+          {{ opponent.chips }}<img class="chips" src="{% static 'images/chips.png' %}"/>
+        </p>
+        <img class="user-image" src="{% static 'images/profile.png' %}"/>
+        <p class="action">
+          {% if opponent.chips == 0 %}
+            All-in
+          {% elif opponent.id == round.player_to_play %}
+            Thinking...
+          {% elif opponent.action == '' or opponent.action == 'call' or opponent.action == 'fold' or opponent.action == 'small blind' or opponent.action == 'big blind' %}
+            {% if opponent.action == 'call' and opponent.bet == 0 %}
+              Check
+            {% else %}
+              {{ opponent.action|title }}
+            {% endif %}
+          {% else %}
+            Raise to {{ opponent.bet }}
+          {% endif %}
+        </p>
+        <p class="bet-amount">
+          {% if opponent.bet > 0 %}
+            {{ opponent.bet }}<img class="chips" src="{% static 'images/chips.png' %}"/>
+          {% endif %}
+        </p>
+        <div class="opponent-cards">
+          {% if opponent.action != 'fold' %}
+            {% if round.stage == 5 %}
+              {% for card in opponent.cards %}
+                <img class="small-card" title="small-card" src="https://www.deckofcardsapi.com/static/img/back.png"/>
+              {% endfor %}
+            {% else %}
+              <img class="small-card" src="https://www.deckofcardsapi.com/static/img/back.png"/>
+              <img class="small-card"  src="https://www.deckofcardsapi.com/static/img/back.png"/>
+            {% endif %}
+          {% endif %}
+        </div>  
+      </div>
+    {% endif %}
+  {% endfor %}
+{% endblock %}
+
+<!-- TABLE -->
+{% block pot %}
+  <p>
+    {% if round.stage == 0 %}
+      Waiting...
+    {% else %}
+      {% if round.stage == 1 %}
+        Pre-flop
+      {% elif round.stage == 2 %}
+        Flop
+      {% elif round.stage == 3 %}
+        Turn
+      {% elif round.stage == 4 %}
+        River
+      {% elif round.stage == 5 %}
+        Showdown
+      {% elif round.stage == 6 %}
+        Finished early
+      {% endif %}
+      — Pot: {{ round.pot }}<img class="chips" src="{% static 'images/chips.png' %}"/>
+    {% endif %}
+  </p>
+{% endblock %}
+
+{% block community-cards %}
+  {% if round.community_cards != "" and round.stage != 6 %}
+    {% if round.stage >= 2 %}
+      {% with card=round.community_cards|slice:"0:2" %}
+        <img class="card" title="{{ card }}" src="https://deckofcardsapi.com/static/img/{{ card }}.png"/>
+      {% endwith %}
+      {% with card=round.community_cards|slice:"2:4" %}
+        <img class="card" title="{{ card }}" src="https://deckofcardsapi.com/static/img/{{ card }}.png"/>
+      {% endwith %}
+      {% with card=round.community_cards|slice:"4:6" %}
+        <img class="card" title="{{ card }}" src="https://deckofcardsapi.com/static/img/{{ card }}.png"/>
+      {% endwith %}
+    {% else %}
+      <img class="card" src="https://deckofcardsapi.com/static/img/back.png"/>
+      <img class="card" src="https://deckofcardsapi.com/static/img/back.png"/>
+      <img class="card" src="https://deckofcardsapi.com/static/img/back.png"/>
+    {% endif %}
+    {% if round.stage >= 3 %}
+      {% with card=round.community_cards|slice:"6:8" %}
+        <img class="card" title="{{ card }}" src="https://deckofcardsapi.com/static/img/{{ card }}.png"/>
+      {% endwith %}
+    {% else %}
+      <img class="card" src="https://deckofcardsapi.com/static/img/back.png"/>
+    {% endif %}
+    {% if round.stage >= 4 %}
+      {% with card=round.community_cards|slice:"8:10" %}
+        <img class="card" title="{{ card }}" src="https://deckofcardsapi.com/static/img/{{ card }}.png"/>
+      {% endwith %}
+    {% else %}
+      <img class="card" src="https://deckofcardsapi.com/static/img/back.png"/>
+    {% endif %}
+  {% endif %}
+{% endblock %}
+
+<!-- USER-SIDE -->
+{% block user %}
+<div class="player {% if user.action == 'fold' or user.action == 'spectator' %}fold{% endif %} {% if user.id == round.player_to_play %}thinking{% endif %}">
+  {% if user.id == dealer_id %}
+    <div class="dealer">D</div>
+  {% endif %}
+  <p class="username">{{ user.username }}</p> 
+  <p class="chips">
+    {{ user.chips }}<img class="chips" src="{% static 'images/chips.png' %}"/>
+  </p>
+  <img class="user-image" src="{% static 'images/profile.png' %}"/>
+  <p class="action">
+    {% if user.action == 'spectator' %}
+      (Spectating)
+    {% elif user.chips == 0 %}
+      All-in
+    {% elif user.id == round.player_to_play %}
+      Thinking...
+    {% elif user.action == '' or user.action == 'call' or user.action == 'fold' or user.action == 'small blind' or user.action == 'big blind' %}
+      {% if user.action == 'call' and user.bet == 0 %}
+        Check
+      {% else %}
+        {{ user.action|title }}
+      {% endif %}
+    {% else %}
+      Raise to {{ user.bet }}
+    {% endif %}
+  </p>
+  <p class="bet-amount">
+    {% if user.bet > 0 %}
+      {{ user.bet }}<img class="chips" src="{% static 'images/chips.png' %}"/>
+    {% endif %}
+  </p>
+  
+</div>
+{% endblock %}
+
+{% block user-cards %}
+  {% if user.hand != "" and user.action != 'fold' %}
+    {% with card=user.hand|slice:"0:2" %}
+      <img class="card" title="{{ card }}" src="https://deckofcardsapi.com/static/img/{{ card }}.png"/>
+    {% endwith %}
+    {% with card=user.hand|slice:"2:4" %}
+      <img class="card" title="{{ card }}" src="https://deckofcardsapi.com/static/img/{{ card }}.png"/>
+    {% endwith %}
+  {% endif %}
+{% endblock %}
+
+{% block user-fold %}
+  <form method="post" {% if round.player_to_play != user.id %}disabled{% endif %}>
+    {% csrf_token %}
+    <button class="action" name="action" value="fold" {% if round.player_to_play != user.id %}disabled{% endif %}>Fold</button>
+  </form>
+{% endblock %}
+
+{% block user-call-btn %}
+  <form method="post" {% if round.player_to_play != user.id %}disabled{% endif %}>
+  {% csrf_token %}
+  <button class="action" name="action" value="call" {% if round.player_to_play != user.id %}disabled{% endif %}>
+    {% if round.player_to_play == user.id %}
+      {% if call_value > 0 %}
+        {% if max_raise_by > 0  %}
+          <span>Call to {{ call_value }}<img class="chips" src="{% static 'images/chips.png' %}"/></span>
+          <span>(-{{ call_difference }}<img class="chips" src="{% static 'images/chips.png' %}"/>)</span>
+        {% else %}
+          ALL-IN
+        {% endif %}
+      {% else %}
+        Check
+      {% endif %}
+    {% else %}
+      Call
+    {% endif %}
+  </button>
+  </form>
+{% endblock %}
+
+{% block user-raise %}
+  {% if round.player_to_play != user.id or max_raise_by > 0 %}
+    <form method="POST" {% if round.player_to_play != user.id %}disabled{% endif %}>
+      {% csrf_token %}
+      <!-- Le bouton pour soumettre la valeur -->
+      <button class="action" type="submit" id="boutonEnvoyer" {% if round.player_to_play != user.id %}disabled{% endif %}>Raise by</button>
+
+      <!-- Le champ de saisie pour le nombre -->
+      {% if max_raise_by >= round.min_raise %}
+        <input type="number" name="action" id="valeurNombre" value="{{round.min_raise}}" min="{{round.min_raise}}" max="{{max_raise_by}}" {% if round.player_to_play != user.id %}disabled{% endif %}/>
+      {% else %}
+        <input type="number" name="action" id="valeurNombre" value="{{max_raise_by}}" min="{{max_raise_by}}" max="{{max_raise_by}}" {% if round.player_to_play != user.id %}disabled{% endif %}/>
+      {% endif %}
+    </form>
+  {% endif %}
+{% endblock %}
+
+<script>
+  document.getElementById('boutonEnvoyer').addEventListener('click', function() {
+    // Récupérer la valeur entrée par l'utilisateur
+    var valeur = document.getElementById('valeurNombre').value;
+    
+    // Affecter cette valeur à l'input caché du formulaire
+    document.getElementById('valeurAction').value = valeur;
+    
+    // Soumettre le formulaire
+    document.getElementById('formulaireCache').submit();
+  });
+</script>
+  
+{% block previous-round %}
+  {% if previous_round %}
+    <u><h2>Previous round:</h2></u>
+    <ul>
+      <li>
+        <strong>Pot:</strong> {{ previous_round.pot }}<img class="chips" src="{% static 'images/chips.png' %}"/>
+      </li>
+      <li>
+        <strong>Winner(s):</strong> {{ previous_round.winners_name }}
+      </li>
+      <li>
+        {% if previous_round.winner_hand != "" %}
+          <strong>Winning hand:</strong> {{ previous_round.winner_hand }}
+        {% else %}
+          <strong>(Won by default)</strong>
+        {% endif %}
+      </li>
+    </ul>
+  {% endif %}
+{% endblock %}

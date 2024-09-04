@@ -1,0 +1,13 @@
+<html>
+    <head>
+        <title>Poker</title>
+    </head>
+    <body>
+        <h1>Poker</h1>
+        {% block content %}{% endblock content %}
+        {% csrf_token %}
+        {% if user.is_authenticated %}
+            <p>Logged as {{ request.user }}. <a href="{% url 'home' %}">Play</a> </p>  <a href="{% url 'logout' %}">Disconnect</a>
+        {% endif %}
+    </body>
+</html>
